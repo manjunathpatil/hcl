@@ -28,41 +28,38 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: setup Node.js ${{ matrix.node-version }}
-        uses: actions/checkout@v4
-        with:
-         node-version: ${{ matrix.node-version }}
         
-      - name: Install dependencies
-        run: npm init -y
-        working-directory: ./app/parent
+    - name: setup Node.js ${{ matrix.node-version }}
+      uses: actions/checkout@v4
+      with:
+       node-version: ${{ matrix.node-version }}
+        
+    - name: Install dependencies
+      run: npm init -y
+      working-directory: ./app/parent
 
-      - name: Build app
-        run: npm install express
-        working-directory: ./app/parent
+    - name: Build app
+      run: npm install express
+      working-directory: ./app/parent
 
-      - name: Install dependencies
-        run: npm init -y
-        working-directory: ./app/appointment
+    - name: Install dependencies
+      run: npm init -y
+      working-directory: ./app/appointment
 
-      - name: Build app
-        run: npm install express
-        working-directory: ./app/appointment
+    - name: Build app
+      run: npm install express
+      working-directory: ./app/appointment
 
-      - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2
+    - name: Login to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build & Push App Image
-        run: |
+    - name: Build & Push App Image
+      run: |
          docker build -t $REGISTRY/parent:$IMAGE_TAG -f app/appointment/Dockerfile parent
          docker push $REGISTRY/parent:$IMAGE_TAG
 
-      - name: Build & Push Admin Image
-        run: |
+    - name: Build & Push Admin Image
+      run: |
          docker build -t $REGISTRY/appointment:$IMAGE_TAG -f app/appointment/Dockerfile appointment
          docker push $REGISTRY/appointment:$IMAGE_TAG
-          
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file app/parent/Dockerfile --tag my-image-name:$(date +%s)
+         
