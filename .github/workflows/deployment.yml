@@ -36,11 +36,11 @@ jobs:
         
     - name: Install dependencies
       run: npm init -y
-      working-directory: ./app/parent
+      working-directory: ./app/patient
 
     - name: Build app
       run: npm install express
-      working-directory: ./app/parent
+      working-directory: ./app/patient
 
     - name: Install dependencies
       run: npm init -y
@@ -55,7 +55,7 @@ jobs:
 
     - name: Build & Push App Image
       run: |
-         docker build -t $REGISTRY/parent:$IMAGE_TAG -f app/appointment/Dockerfile parent
+         docker build -t $REGISTRY/patient:$IMAGE_TAG -f app/patient/Dockerfile patient
          docker push $REGISTRY/parent:$IMAGE_TAG
 
     - name: Build & Push Admin Image
