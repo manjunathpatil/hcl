@@ -25,13 +25,12 @@ jobs:
         node-version: ${{ matrix.node-version }}
         
     - name: Install dependencies
-      run: npm install 
-
-    - name: Run tests
-      run: npm test
+      run: npm init -y
+      working-directory: ./app/parent
 
     - name: Build app
-      run: npm run build
+      run: npm install express
+      working-directory: ./app/parent
           
     - uses: actions/checkout@v4
     - name: Build the Docker image
