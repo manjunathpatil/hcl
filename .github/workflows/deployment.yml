@@ -8,13 +8,26 @@ on:
 
 jobs:
 
-  build:
-
+  build-and-deploy:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [18.x]
+  
     steps:
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v3.9.1
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: setup Node.js ${{ matrix.node-version }}
+      uses: actions/checkout@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install dependencies
+      run: npm init -y
+
+    - name: Build app
+      run: npm install express
           
     - uses: actions/checkout@v4
     - name: Build the Docker image
